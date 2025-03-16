@@ -1,0 +1,41 @@
+import random
+from sympy import primerange, primitive_root
+
+# Function to get a random prime number in a given range
+def get_random_prime(start=20, end=100):
+    primes = list(primerange(start, end))
+    return random.choice(primes)
+
+# Generate a random prime `q`
+q = get_random_prime()
+
+# Find a primitive root `a` of `q`
+a = primitive_root(q)
+
+print(f"Generated prime q: {q}")
+print(f"Primitive root a: {a}")
+
+# Generate private keys (Xa and Xb)
+Xa = random.randint(1, q - 1)  # Alice's private key
+Xb = random.randint(1, q - 1)  # Bob's private key
+
+# Generate public keys (Ya and Yb)
+Ya = pow(a, Xa, q)  # Alice's public key
+Yb = pow(a, Xb, q)  # Bob's public key
+
+print(f"\nAlice's private key: {Xa}")
+print(f"Alice's public key: {Ya}")
+
+print(f"\nBob's private key: {Xb}")
+print(f"Bob's public key: {Yb}")
+
+# Exchange public keys and compute shared secret
+Ka = pow(Yb, Xa, q)  # Alice's secret key
+Kb = pow(Ya, Xb, q)  # Bob's secret key
+
+print(f"\nAlice's secret key: {Ka}")
+print(f"Bob's secret key: {Kb}")
+
+# Verify that both secret keys match
+assert Ka == Kb, "Error: Secret keys do not match!"
+print("\nKey exchange successful! 🔐")
